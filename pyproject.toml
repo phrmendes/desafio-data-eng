@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "desafio_data_eng"
+version = "0.1.0"
+description = "Desafio de Data Engineer - EMD"
+authors = ["Pedro Mendes <pedrohrmendes@proton.me>"]
+readme = "README.md"
+repository = "https://github.com/phrmendes/desafio-data-eng"
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "^4.12.3"
+dbt-core = "^1.8.4"
+openpyxl = "^3.1.5"
+pandas = "^2.2.2"
+prefect = "^2.19.8"
+pyarrow = "^17.0.0"
+pyjanitor = "^0.27.0"
+requests = "^2.32.3"
+sqlalchemy = "^2.0.31"
+
+[tool.poetry.group.dev.dependencies]
+basedpyright = "^1.14.0"
+debugpy = "^1.8.2"
+ipython = "^8.26.0"
+ruff = "^0.4.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.basedpyright]
+typeCheckingMode = "standard"
+useLibraryCodeForTypes = true
+venvPath = "."
+venv = ".venv"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+indent-width = 4
+select = ["ALL"]
+exclude = [".git", ".ruff_cache", "__pycache__"]
+ignore = [
+  "ANN101", # missing type annotation for self in method
+  "ARG001", # unused function argument
+  "D100",   # missing docstring in public module
+  "D103",   # missing docstring in public function
+  "S603",   # subprocess call - check for execution of untrusted input
+  "T201",   # print statement used in code
+]

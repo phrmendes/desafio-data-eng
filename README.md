@@ -8,7 +8,6 @@ Neste desafio você deverá capturar, estruturar, armazenar e transformar dados 
 
 Para o desafio, será necessário construir uma pipeline que realiza a extração, processamento e transformação dos dados. Salve os dados de cada mes em um arquivo CSV (estruture os dados da maneira que achar mais conveniente, você tem liberdade para criar novas colunas ou particionar os dados), então carregue os dados para uma tabela no Postgres. Por fim, crie uma tabela derivada usando o DBT. A tabela derivada deverá seguir a padronização especificada no [manual de estilo do Escritorio de Dados](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas). A solução devera contemplar o surgimento de novos dados a cada 4 meses.
 
-
 ## O que iremos avaliar
 
 - **Completude**: A solução proposta atende a todos os requisitos do desafio?
@@ -34,7 +33,6 @@ Para o desafio, será necessário construir uma pipeline que realiza a extraçã
 - Repositório pipelines do [Escritorio de Dados](https://github.com/prefeitura-rio/pipelines)
 - Repositório de modelos DBT do [Escritorio de Dados](https://github.com/prefeitura-rio/queries-datario)
 - [Manual de estilo do Escritório de Dados](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas)
-  
 ## Dúvidas?
 
 Fale conosco pelo e-mail que foi utilizado para o envio desse desafio.
