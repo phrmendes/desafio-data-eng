@@ -22,14 +22,16 @@
       in {
         devShells.default = pkgs.mkShell {
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (with pkgs; [
-            zlib
             stdenv.cc
             stdenv.cc.cc.lib
+            zlib
           ]);
 
           packages = with pkgs; [
-            poetry
             python312
+            poetry
+            postgresql
+            libpqxx
           ];
         };
       }
