@@ -1,0 +1,10 @@
+**/__pycache__/
+*.nix
+.direnv
+.docker-compose.yml
+.envrc
+README.md
+database
+dbt_project
+logs
+output

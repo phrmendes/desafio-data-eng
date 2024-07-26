@@ -7,7 +7,9 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from janitor import clean_names, remove_empty
 from loguru import logger
+from prefect import flow
 from requests import get
+from sqlalchemy import select
 
 import pipelines.terceirizados.constants as const
 from pipelines.settings import Settings
@@ -147,9 +149,13 @@ def get_links(settings: Settings) -> list[str]:
     ]
 
 
-def get_data(urls: list[str], max_workers: int = 6) -> None:
+@flow
+def get_data(max_workers: int = 6) -> None:
     """Run pipeline."""
+    settings = Settings()
+    urls = get_links(settings)
+
     with ThreadPoolExecutor(max_workers) as executor:
         executor.map(download, urls)
 
-    import_csv(Path("output"))
+    import_csv(Path(settings.CSV_FOLDER))

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from loguru import logger
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, select, text
 
 from pipelines.settings import Settings
 
@@ -12,11 +12,10 @@ def is_data_present(date: str) -> bool:
     """Check if the current month data is already present in the database."""
     engine = create_engine(settings.DB_CONNECTION_STRING.get_secret_value())
 
-    query = text("SELECT * FROM terceirizados WHERE date = :date")
-    variables = {"date": date}
+    query = select(text(f"* FROM {settings.DB_NAME}")).where(text(f"date = '{date}'"))
 
     with engine.connect() as con:
-        result = con.execute(query, variables)
+        result = con.execute(query)
 
     return result.fetchone() is not None
 

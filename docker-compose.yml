@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   db:
+    container_name: postgres
     image: postgres
     restart: always
     environment:
@@ -12,14 +13,30 @@ services:
       - 5432:5432
     volumes:
       - ./output:/output
-      - ./database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - /tmp/posgres_data:/var/lib/posgresql/data
     develop:
       watch:
         - action: rebuild
           path: ./database/create.sql
-  adminer:
-    image: adminer
-    restart: always
+  server:
+    container_name: server
+    image: prefecthq/prefect:2-python3.12
+    entrypoint: ["prefect", "server", "start"]
+    volumes:
+      - /tmp/prefect:/root/.prefect
     ports:
-      - 8080:8080
+      - 4200:4200
+    environment:
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+  agent:
+    container_name: agent
+    build: .
+    volumes:
+      - ./output:/output
+    environment:
+      BASE_URL: https://www.gov.br/cgu/pt-br/acesso-a-informacao/dados-abertos/arquivos/terceirizados
+      CSV_FOLDER: /output
+      DB_CONNECTION_STRING: postgresql://admin:password123@db:5432/desafio_data_eng
+      DB_NAME: terceirizados
+      PREFECT_API_URL: http://server:4200/api
