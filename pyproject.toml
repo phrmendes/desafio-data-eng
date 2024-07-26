@@ -6,6 +6,7 @@ authors = ["Pedro Mendes <pedrohrmendes@proton.me>"]
 readme = "README.md"
 repository = "https://github.com/phrmendes/desafio-data-eng"
 license = "GPL-3.0"
+packages = [{ include = "terceirizados", from = "pipelines" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
