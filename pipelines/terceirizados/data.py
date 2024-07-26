@@ -11,6 +11,7 @@ from requests import get
 
 import pipelines.terceirizados.constants as const
 from pipelines.settings import Settings
+from pipelines.terceirizados.db import import_csv, is_data_present
 
 read_csv = partial(
     pd.read_csv,
@@ -37,6 +38,11 @@ def get_date_extension(url: str) -> tuple[str, str]:
         .removeprefix("_")
         .removesuffix("_1")
     )
+
+    year = date[:4]
+    month = date[4:]
+
+    date = f"{year}-{month}-01"
 
     return date, extension
 
@@ -83,9 +89,6 @@ def handle_numeric_columns(data: pd.DataFrame) -> pd.DataFrame:
             .astype(float)
         )
 
-    for column in const.INT_COLUMNS:
-        data[column] = data[column].astype(int)
-
     return data
 
 
@@ -105,23 +108,26 @@ def clear(data: pd.DataFrame) -> pd.DataFrame:
 def download(url: str) -> None:
     """Download a spreadsheet."""
     date, ext = get_date_extension(url)
-    year = date[:4]
-    month = date[4:]
+
+    if is_data_present(date):
+        logger.info(f"Data already present - date: {date}")
+        return
 
     tempfile = Path(f"output/{date}.csv")
     tempfile.parent.mkdir(exist_ok=True)
 
-    logger.info(f"Download - year: {year}, month: {month}, extension: {ext}")
+    logger.info(f"Downloading - date: {date}, extension: {ext}")
 
     try:
         data = read_csv(url) if ext == "csv" else read_excel(url)
     except UnicodeDecodeError:
-        logger.error("Encoding error - using latin-1")
+        logger.error("Encoding error")
+        logger.info("Using latin-1 encoding")
         data = read_csv(url, encoding="latin-1")
     finally:
         logger.success("Download completed")
 
-    data.pipe(clear).to_csv(tempfile)
+    data.pipe(clear).to_csv(tempfile, index=False)
 
     del data
     gc.collect()
@@ -141,7 +147,9 @@ def get_links(settings: Settings) -> list[str]:
     ]
 
 
-def save(urls: list[str], max_workers: int = 6) -> None:
-    """Save all spreadsheets in the local storage."""
+def get_data(urls: list[str], max_workers: int = 6) -> None:
+    """Run pipeline."""
     with ThreadPoolExecutor(max_workers) as executor:
         executor.map(download, urls)
+
+    import_csv(Path("output"))

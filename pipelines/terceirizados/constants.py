@@ -2,8 +2,7 @@ DOWNLOAD_LINK_CLASS = "cover-richtext-tile tile-content"
 REQUEST_TIMEOUT = 10
 NA_VALUES = ["NI  ", "<N/I>", "-2"]
 DATE_COLUMNS = ["num_mes_carga", "ano_carga", "mes_carga"]
-INT_COLUMNS = ["nr_cnpj"]
-NUMERIC_COLUMNS = [*INT_COLUMNS, "vl_mensal_salario", "vl_mensal_custo", "nr_jornada"]
+NUMERIC_COLUMNS = ["vl_mensal_salario", "vl_mensal_custo", "nr_jornada"]
 COLUMNS = [
     "id_terc",
     "sg_orgao_sup_tabela_ug",

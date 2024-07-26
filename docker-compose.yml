@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: desafio_data_eng
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+    ports:
+      - 5432:5432
+    volumes:
+      - ./output:/output
+      - ./database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      - /tmp/posgres_data:/var/lib/posgresql/data
+    develop:
+      watch:
+        - action: rebuild
+          path: ./database/create.sql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
